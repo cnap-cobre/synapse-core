@@ -1,0 +1,4 @@
+Django>=2.0
+psycopg2
+agavepy==0.7.0
+django-crispy-forms
