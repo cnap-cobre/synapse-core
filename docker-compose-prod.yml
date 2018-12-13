@@ -1,0 +1,61 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  rabbitmq:
+      image: "rabbitmq:3.7.8-alpine"
+      volumes:
+        - rabbitmqdb:/var/lib/rabbitmq
+      hostname: rabbitmq
+  backend:
+    build:
+      context: ./backend
+      args:
+        mode: prod
+    command: sh -c "python manage.py collectstatic --noinput; gunicorn global.wsgi:application --name synapse --bind 0.0.0.0:3002 --workers 5 --reload"
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
+    volumes:
+      - ./backend:/code
+      - /tmp/cnap:/transient
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+  celery:
+    build:
+      context: ./backend
+      args:
+        mode: prod
+    command: celery -A global.celery_config:app worker -l info --logfile='/transient/logs/celery.log' --concurrency=20
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
+    volumes:
+      - ./backend:/code
+      - /tmp/cnap:/transient
+    depends_on:
+      - db
+      - rabbitmq
+  celery-beat:
+    build:
+      context: ./backend
+      args:
+        mode: prod
+    command: sh -c 'rm celerybeat.pid; celery -A global.celery_config:app beat -l info'
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
+    volumes:
+      - ./backend:/code
+    depends_on:
+      - db
+      - rabbitmq
+
+volumes:
+  db_data:
+  rabbitmqdb:
