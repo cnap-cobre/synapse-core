@@ -17,7 +17,7 @@ services:
     hostname: rabbitmq
   backend:
     build:
-      context: ./backend
+      context: .
       args:
         mode: dev
     command: python3 manage.py runserver 0.0.0.0:3001
@@ -25,7 +25,7 @@ services:
       - DJANGO_SETTINGS_MODULE=global.settings.dev
       - ENV=dev
     volumes:
-      - ./backend:/code
+      - .:/code
       - /tmp/cnap:/transient
     ports:
       - "3001:3001"
@@ -33,7 +33,7 @@ services:
       - db
   celery:
     build:
-      context: ./backend
+      context: .
       args:
         mode: dev
     command: celery -A global.celery_config:app worker -l info --logfile='/transient/logs/celery.log' --concurrency=20
@@ -41,14 +41,14 @@ services:
       - DJANGO_SETTINGS_MODULE=global.settings.dev
       - ENV=dev
     volumes:
-      - ./backend:/code
+      - .:/code
       - /tmp/cnap:/transient
     depends_on:
       - db
       - rabbitmq
   celery-beat:
     build:
-      context: ./backend
+      context: .
       args:
         mode: dev
     command: sh -c 'rm celerybeat.pid; celery -A global.celery_config:app beat -l info'
@@ -56,7 +56,7 @@ services:
       - DJANGO_SETTINGS_MODULE=global.settings.dev
       - ENV=dev
     volumes:
-      - ./backend:/code
+      - .:/code
     depends_on:
       - db
       - rabbitmq
