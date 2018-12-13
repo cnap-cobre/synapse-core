@@ -5,3 +5,4 @@ static/*
 media/*
 celerybeat-schedule
 celerybeat.pid
+.idea
