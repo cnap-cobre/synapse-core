@@ -37,8 +37,6 @@ ADMINS = ['kevin.dice1@gmail.com']
 SERVER_EMAIL = ['noreply@synapse.ksu.edu']
 
 ALLOWED_HOSTS = [
-    'hosted.beocat.ksu.edu',
-    'hosted.beocat.ksu.edu:10443',
     'synapse.ksu.edu',
 ]
 
@@ -70,10 +68,12 @@ INSTALLED_APPS = [
     'webpack_loader',
     'compressor',
     'django_gravatar',
+    'corsheaders',
 
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'rest_auth.registration',
 
     'smuggler',
 
@@ -85,6 +85,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,16 +169,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# SPA React Webpack Config
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': '../static/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'stats/stats.json'),
-    }
-}
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
@@ -220,8 +211,12 @@ COMPRESS_ENABLED = True
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    )
+   #     'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 }
 
 
@@ -237,3 +232,5 @@ CELERY_BEAT_SCHEDULE = {
     #     'schedule': crontab()
     # }
 }
+
+CORS_ORIGIN_WHITELIST = ['localhost:3000']

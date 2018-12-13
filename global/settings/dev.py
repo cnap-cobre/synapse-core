@@ -15,4 +15,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 ALLOWED_HOSTS += ['localhost']
-CSRF_TRUSTED_ORIGINS += ['localhost']
+CSRF_TRUSTED_ORIGINS += ['localhost', 'localhost:3001']
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000'
+)

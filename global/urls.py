@@ -19,7 +19,6 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from apps.main import views as main_views
 from apps.agave_proxy.views import AgaveProxy
 from apps.dropbox_proxy.views import DropboxProxy, \
         DropboxApiProxy, DropboxContentProxy
@@ -30,7 +29,6 @@ urlpatterns = [
     re_path('^admin/', include('smuggler.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    #path('getting_started/', include('')),
     re_path(r'^agave/', AgaveProxy.as_view(
         url_name='agpx'
     ), name='agpx'),
@@ -54,8 +52,6 @@ urlpatterns = [
     ), name='glpx'),
     re_path(r'^api/v1/', include('global.apiurls')),
     re_path(r'^profile/', include('apps.profile.urls')),
-    re_path(r'^getting_started/', main_views.getting_started, name='getting_started'),
-    re_path(r'^.*', main_views.app, name='app'),
 ]
 
 if settings.DEBUG:
