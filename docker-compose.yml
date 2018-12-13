@@ -5,11 +5,6 @@ services:
     image: postgres
     volumes:
       - db_data:/var/lib/postgresql/data
-  flower:
-    image: mher/flower
-    command: --port=5555 --broker=amqp://rabbitmq:5672
-    ports:
-      - "5555:5555"
   rabbitmq:
     image: "rabbitmq:3.7.8-alpine"
     volumes:
@@ -18,8 +13,6 @@ services:
   backend:
     build:
       context: .
-      args:
-        mode: dev
     command: python3 manage.py runserver 0.0.0.0:3001
     environment:
       - DJANGO_SETTINGS_MODULE=global.settings.dev
@@ -34,8 +27,6 @@ services:
   celery:
     build:
       context: .
-      args:
-        mode: dev
     command: celery -A global.celery_config:app worker -l info --logfile='/transient/logs/celery.log' --concurrency=20
     environment:
       - DJANGO_SETTINGS_MODULE=global.settings.dev
@@ -49,8 +40,6 @@ services:
   celery-beat:
     build:
       context: .
-      args:
-        mode: dev
     command: sh -c 'rm celerybeat.pid; celery -A global.celery_config:app beat -l info'
     environment:
       - DJANGO_SETTINGS_MODULE=global.settings.dev

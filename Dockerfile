@@ -1,17 +1,14 @@
 FROM python:3.6.7
 ENV PYTHONUNBUFFERED 1
 
-# Passed in from docker-compose file
-ARG mode
-
 USER root
 
 WORKDIR /code
 RUN apt-get update && apt-get install -y ruby ruby-dev && rm -rf /var/lib/apt/lists/*
 RUN gem install sass --version 3.5.6
-ADD requirements/*.txt /code/requirements/
+ADD requirements.txt /code/
 RUN pip install --upgrade pip
-RUN pip install -r requirements/$mode.txt
+RUN pip install -r requirements.txt
 RUN pip install git+git://github.com/kevindice/django-allauth@8a44423
 
 RUN groupadd -r appuser -g 1000 \

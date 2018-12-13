@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+  flower:
+    image: mher/flower
+    command: --port=5555 --broker=amqp://rabbitmq:5672
+    ports:
+      - "5555:5555"

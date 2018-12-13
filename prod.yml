@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  backend:
+    command: sh -c "python manage.py collectstatic --noinput; gunicorn global.wsgi:application --name synapse --bind 0.0.0.0:3001 --workers 5 --reload"
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
+  celery:
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
+  celery-beat:
+    command: sh -c 'rm celerybeat.pid; celery -A global.celery_config:app beat -l info'
+    environment:
+      - DJANGO_SETTINGS_MODULE=global.settings.prod
+      - ENV=prod
