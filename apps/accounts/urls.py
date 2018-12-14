@@ -48,10 +48,8 @@ class JupyterHubConnect(SocialConnectView):
 
 urlpatterns = [
     url(r'^', include('rest_auth.urls')),
+    url(r'^registration/account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(), name='account_confirm_email'),
     url(r'^registration/', include('rest_auth.registration.urls')),
-
-
-    url(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(), name='account_confirm_email'),
 
     url(
         r'^socialaccounts/$',
