@@ -13,7 +13,7 @@ curl -0 -v -k -X POST https://{{request.get_host}}/agave/systems/v2/ \
 --cookie "csrftoken={{ csrftoken }}; sessionid={{ sessionkey }}" \
 -d @- << EOF
 {
-  "id": "beocat-prod-`whoami`",
+  "id": "beocat-synapse-`whoami`",
   "name": "Beocat",
   "status": "UP",
   "type": "EXECUTION",
