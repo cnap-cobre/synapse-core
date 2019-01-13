@@ -16,7 +16,11 @@ curl -0 -v -k -X POST https://{{request.get_host}}/agave/systems/v2/ \
   "id": "beocat-prod-`whoami`",
   "name": "Beocat",
   "status": "UP",
-  "type": "STORAGE",
+  "type": "EXECUTION",
+  "executionType": "HPC",
+  "scheduler": "SLURM",
+  "scratchDir": "/scratch/`whoami`",
+  "workDir": "/tmp",
   "description": "Beocat supercomputer at K-State",
   "site": "beocat.ksu.edu",
   "storage": {
@@ -29,7 +33,48 @@ curl -0 -v -k -X POST https://{{request.get_host}}/agave/systems/v2/ \
       "privateKey": "${PRIVATE_KEY}",
       "type": "SSHKEYS"
     }
-  }
+  },
+  "login": {
+    "host": "beocat.ksu.edu",
+    "port": 22,
+    "protocol": "SSH",
+    "proxyTunnel": "NO",
+    "auth": {
+      "username": "`whoami`",
+      "publicKey": "${PUBLIC_KEY}",
+      "privateKey": "${PRIVATE_KEY}",
+      "type": "SSHKEYS"
+    }
+  },
+  "queues": [
+    {
+      "default": false,
+      "name": "killable.q",
+      "maxJobs": -1,
+      "maxNodes": -1,
+      "maxMemoryPerNode": "1024GB",
+      "maxProcessorsPerNode": -1,
+      "maxRequestedTime": "720:00:00"
+    },
+    {
+      "default": false,
+      "name": "batch.q",
+      "maxJobs": -1,
+      "maxNodes": -1,
+      "maxMemoryPerNode": "1024GB",
+      "maxProcessorsPerNode": -1,
+      "maxRequestedTime": "720:00:00"
+    },
+    {
+      "default": false,
+      "name": "ksu-psych-kirkpatr.q",
+      "maxJobs": -1,
+      "maxNodes": -1,
+      "maxMemoryPerNode": "1024GB",
+      "maxProcessorsPerNode": -1,
+      "maxRequestedTime": "720:00:00"
+    }
+  ],
 }
 EOF
 
