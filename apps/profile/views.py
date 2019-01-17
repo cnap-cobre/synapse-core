@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponse
 
+import hashlib
+import datetime
 
 @login_required
 def add_beocat_script(request, template_name='add_beocat_script.html'):
@@ -10,5 +12,6 @@ def add_beocat_script(request, template_name='add_beocat_script.html'):
     csrf = request.COOKIES['csrftoken']
     return render(request, template_name, {
         'sessionkey': session_key,
-        'csrftoken': csrf
+        'csrftoken': csrf,
+        'hash': hashlib.sha224(str(datetime.datetime.now()).encode('utf-8')).hexdigest()[0:6]
     }, content_type='text/plain')
