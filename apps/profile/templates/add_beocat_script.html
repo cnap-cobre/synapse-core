@@ -29,6 +29,7 @@ curl -0 -v -k -X POST https://{{request.get_host}}/agave/systems/v2/ \
     "protocol": "SFTP",
     "auth": {
       "username": "`whoami`",
+      "internalUsername": "`whoami`",
       "publicKey": "${PUBLIC_KEY}",
       "privateKey": "${PRIVATE_KEY}",
       "type": "SSHKEYS"
