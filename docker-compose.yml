@@ -33,7 +33,7 @@ services:
       - ENV=dev
     volumes:
       - .:/code
-      - /tmp/cnap:/transient
+      - ./transient:/transient
     depends_on:
       - db
       - rabbitmq
